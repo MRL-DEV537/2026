@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>365 Ideas para Nosotros</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ===== CAPA REGALO ===== */
+#giftLock{
+  position:fixed;
+  inset:0;
+  backdrop-filter: blur(12px);
+  background:rgba(0,0,0,.6);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+}
+
+.giftBox{
+  background:#1c1c22;
+  padding:40px 46px;
+  border-radius:22px;
+  text-align:center;
+  box-shadow:0 0 40px rgba(255,100,200,.45);
+  animation: popIn .8s ease;
+}
+
+@keyframes popIn{
+  from{transform:scale(.4);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+#unlockBtn{
+  margin-top:18px;
+  padding:14px 28px;
+  font-size:18px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(45deg,#ff4ecd,#ffae00);
+  color:#000;
+  cursor:pointer;
+  animation:pulse 1.5s infinite;
+  box-shadow:0 0 18px rgba(255,150,0,.7);
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.1)}
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🔒 REGALO LOCAL -->
+<div id="giftLock">
+  <div class="giftBox">
+    <h2>🎁 Tienes un regalo</h2>
+    <p>No lo abras hasta el día indicado 😉</p>
+    <button id="unlockBtn">Desbloquear regalo</button>
+  </div>
+</div>
+
+<audio id="unlockSound" src="unlock.mp3"></audio>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+
+<h1>365 Ideas para Nosotros 💕</h1>
+
+<div class="progress">
+<span id="done">0</span> / 365 completadas
+</div>
+
+<div class="controls">
+<button id="markAll">Marcar todas</button>
+<button id="unmarkAll">Desmarcar todas</button>
+</div>
+
+<div id="list"></div>
+
+</div>
+
+<div id="modal" onclick="closeModal()">
+  <div class="modalBox" onclick="event.stopPropagation()">
+    <h2 id="modalTitle"></h2>
+    <p id="modalDesc"></p>
+    <button onclick="closeModal()">Cerrar</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script src="particles.js"></script>
+
+<script>
+/* ===== LOGICA REGALO LOCAL ===== */
+const lock = document.getElementById("giftLock");
+const btn  = document.getElementById("unlockBtn");
+const snd  = document.getElementById("unlockSound");
+
+// Si ya se desbloqueó en este dispositivo, no mostrar
+if(localStorage.getItem("giftUnlocked") === "yes"){
+  lock.style.display = "none";
+}
+
+btn.addEventListener("click", ()=>{
+  snd.play();
+  lock.style.opacity = 0;
+  setTimeout(()=> lock.remove(), 500);
+  localStorage.setItem("giftUnlocked","yes");
+});
+</script>
+
+</body>
+</html>
